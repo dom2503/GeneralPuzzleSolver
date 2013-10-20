@@ -3,13 +3,13 @@ package generalpuzzlesolver;
 /**
  *
  */
-abstract public class LocalStateManager {
+public interface LocalStateManager {
   
-  abstract public PuzzleState getNextRandomState();
+  public PuzzleState getNextRandomState();
   
-  abstract public double calculateEnergy(PuzzleState state);
+  public double calculateEnergy(PuzzleState state);
   
-  abstract public PuzzleState getNeighbour(PuzzleState state);
+  public PuzzleState getNeighbour(PuzzleState state);
   
   abstract public boolean isFinal(PuzzleState state);
   

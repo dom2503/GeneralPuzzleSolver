@@ -11,8 +11,11 @@ abstract public class ConstraintBasedLocalSearch {
   private LocalStateManager stateManager;
   private int maximumSteps;
   
-  public void setStateManager(LocalStateManager stateManager, int maximumSteps){
+  public ConstraintBasedLocalSearch(int maximumSteps){
     this.maximumSteps =  maximumSteps;
+  }
+  
+  public void setStateManager(LocalStateManager stateManager){
     this.stateManager = stateManager;
   }
   

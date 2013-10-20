@@ -7,11 +7,15 @@ public class SimulatedAnnealing extends ConstraintBasedLocalSearch{
   
   private static final double MAXIMUM_ENERGY = 1.0;
   
+  public SimulatedAnnealing(int maximumSteps){
+    super(maximumSteps);
+  }
+  
   /**
    * Based on pseudocode from Wikipedia:
    * https://en.wikipedia.org/wiki/Simulated_annealing
    */
-  public void run(){
+  public PuzzleState run(){
     int evaluationCounter = 0;
     double temperature = -1.0;
     
@@ -39,6 +43,8 @@ public class SimulatedAnnealing extends ConstraintBasedLocalSearch{
       
       evaluationCounter++;
     }
+    
+    return bestState;
   }
   
   public void reset(){

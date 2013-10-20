@@ -5,6 +5,10 @@ package generalpuzzlesolver;
  */
 public class MinConflicts extends ConstraintBasedLocalSearch {
 
+  public MinConflicts(int maximumSteps){
+    super(maximumSteps);
+  }
+  
   @Override
   public PuzzleState run() {
     PuzzleState currentState = this.getStateManager().getNextRandomState();

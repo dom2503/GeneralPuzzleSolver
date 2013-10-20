@@ -108,10 +108,10 @@ public class GeneralPuzzleSolver {
 
     switch (algorithmIndex) {
       case 1:
-        selectedSearcher = new SimulatedAnnealing();
+        selectedSearcher = new SimulatedAnnealing(1000);
         break;
       case 2:
-        selectedSearcher = new MinConflicts();
+        selectedSearcher = new MinConflicts(1000);
         break;
       default:
         //wrong selection, so start again
