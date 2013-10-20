@@ -3,17 +3,16 @@ package generalpuzzlesolver;
 /**
  *
  */
-abstract public class SimulatedAnnealing extends ConstraintBasedLocalSearch{
+public class SimulatedAnnealing extends ConstraintBasedLocalSearch{
   
-  private static final int MAXIMUM_TRIES = 1000;
   private static final double MAXIMUM_ENERGY = 1.0;
   
   /**
    * Based on pseudocode from Wikipedia:
    * https://en.wikipedia.org/wiki/Simulated_annealing
    */
-  public void search(){
-    int evaluationCount = 0;
+  public void run(){
+    int evaluationCounter = 0;
     double temperature = -1.0;
     
     PuzzleState currentState = this.getStateManager().getNextRandomState();
@@ -23,19 +22,33 @@ abstract public class SimulatedAnnealing extends ConstraintBasedLocalSearch{
     double nextEnergy;
     
     PuzzleState bestState = currentState;
-    double bestEnergy;
+    double bestEnergy = -1.0;
     
-    while(evaluationCount < MAXIMUM_TRIES && energy > MAXIMUM_ENERGY){
-      temperature = this.calculateTemperature(currentState);
+    while(evaluationCounter < this.getMaximumSteps() && energy > MAXIMUM_ENERGY){
+      temperature = this.calculateTemperature(evaluationCounter/this.getMaximumSteps());
+      
       nextState = this.getStateManager().getNeighbour(currentState);
+      nextEnergy = this.calculateEnergy(nextState);
       
+      //missing if here
       
-      if()
+      if(nextEnergy < bestEnergy){
+        bestEnergy = nextEnergy;
+        bestState = nextState;
+      }
       
-      evaluationCount++;
+      evaluationCounter++;
     }
   }
   
-  abstract protected double calculateTemperature(PuzzleState state);
-  abstract protected double calculateEnergy(PuzzleState state);
+  public void reset(){
+    
+  }
+  
+  protected double calculateTemperature(double input){
+    return 1.0;
+  }
+  protected double calculateEnergy(PuzzleState state){
+    return 1.0;
+  }
 }

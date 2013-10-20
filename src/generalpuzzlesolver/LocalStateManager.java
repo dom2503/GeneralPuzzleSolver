@@ -1,12 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package generalpuzzlesolver;
 
 /**
  *
- * @author dominik
  */
 abstract public class LocalStateManager {
   
@@ -15,4 +10,8 @@ abstract public class LocalStateManager {
   abstract public double calculateEnergy(PuzzleState state);
   
   abstract public PuzzleState getNeighbour(PuzzleState state);
+  
+  abstract public boolean isFinal(PuzzleState state);
+  
+  abstract public void reset();
 }
