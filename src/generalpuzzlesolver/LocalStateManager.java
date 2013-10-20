@@ -11,7 +11,7 @@ public interface LocalStateManager {
   
   public PuzzleState getNeighbour(PuzzleState state);
   
-  abstract public boolean isFinal(PuzzleState state);
-  
   abstract public void reset();
+  
+  public void displayCurrentState();
 }

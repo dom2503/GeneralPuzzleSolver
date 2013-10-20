@@ -14,7 +14,7 @@ public class MinConflicts extends ConstraintBasedLocalSearch {
     PuzzleState currentState = this.getStateManager().getNextRandomState();
 
     for (int i = 0; i < this.getMaximumSteps(); i++) {
-      if (this.getStateManager().isFinal(currentState)) {
+      if (currentState.isFinal()) {
         return currentState;
       }
       currentState = this.getStateManager().getNeighbour(currentState);

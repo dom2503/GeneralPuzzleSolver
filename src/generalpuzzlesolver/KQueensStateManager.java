@@ -11,6 +11,7 @@ package generalpuzzlesolver;
 public class KQueensStateManager implements LocalStateManager{
 
   private int size;
+  private boolean[][] queenPositions;
   
   public KQueensStateManager(){
     this(8);
@@ -18,6 +19,11 @@ public class KQueensStateManager implements LocalStateManager{
   
   public KQueensStateManager(int size){
     this.size = size;
+    queenPositions = new boolean[size][size];
+  }
+  
+  public void setQueen(int x, int y){
+    queenPositions[x][y] = true;
   }
   
   @Override
@@ -36,12 +42,12 @@ public class KQueensStateManager implements LocalStateManager{
   }
 
   @Override
-  public boolean isFinal(PuzzleState state) {
+  public void reset() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public void reset() {
+  public void displayCurrentState() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   

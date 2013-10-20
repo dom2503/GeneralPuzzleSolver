@@ -66,7 +66,7 @@ public class GeneralPuzzleSolver {
   private LocalStateManager choosePuzzle() {
     System.out.println("Which puzzle would you like to use?");
     System.out.println("1. k-Queens");
-    System.out.println("2. Graph Colouring");
+    System.out.println("2. Graph Coloring");
 
     int puzzleIndex = this.readIntInRange(1, 2);
 
@@ -77,7 +77,10 @@ public class GeneralPuzzleSolver {
         selectedPuzzle = new KQueensStateManager();
         break;
       case 2:
-        selectedPuzzle = new GraphColouringStateManager();
+        GraphColoringStateManager graphColoring = new GraphColoringStateManager();
+        selectedPuzzle = graphColoring;
+        graphColoring.generateStateFromFile("/Users/dominik/Projects/GeneralPuzzleSolver/build/classes/generalpuzzlesolver/graph-color-2.txt");
+        selectedPuzzle.displayCurrentState();
         break;
       default:
         //wrong selection, so start again
