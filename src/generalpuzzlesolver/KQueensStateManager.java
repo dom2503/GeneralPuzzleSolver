@@ -37,7 +37,7 @@ public class KQueensStateManager implements LocalStateManager{
   }
 
   @Override
-  public PuzzleState getNeighbour(PuzzleState state) {
+  public PuzzleState getNeighbour() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
@@ -48,6 +48,11 @@ public class KQueensStateManager implements LocalStateManager{
 
   @Override
   public void displayCurrentState() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public PuzzleState getCurrentState() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   

@@ -1,5 +1,7 @@
 package generalpuzzlesolver;
 
+import java.util.ArrayList;
+
 /**
  *
  */
@@ -11,6 +13,11 @@ public class KQueensPuzzleState implements PuzzleState{
 
   @Override
   public boolean isFinal() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public ArrayList<Conflict> getConflicts() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

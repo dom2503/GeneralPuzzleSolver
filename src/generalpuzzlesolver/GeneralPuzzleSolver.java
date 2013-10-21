@@ -40,8 +40,12 @@ public class GeneralPuzzleSolver {
 
     this.resetStatistics();
 
+    PuzzleState currentSolution;
+    
     for (int i = 0; i < this.numberOfRuns; i++) {
-      this.searcher.run();
+      currentSolution = this.searcher.run();
+        currentSolution.display();
+        System.out.println("Number of conflicts: " + currentSolution.getConflicts().size());
     }
   }
 
@@ -79,8 +83,7 @@ public class GeneralPuzzleSolver {
       case 2:
         GraphColoringStateManager graphColoring = new GraphColoringStateManager();
         selectedPuzzle = graphColoring;
-        graphColoring.generateStateFromFile("/Users/dominik/Projects/GeneralPuzzleSolver/build/classes/generalpuzzlesolver/graph-color-2.txt");
-        selectedPuzzle.displayCurrentState();
+        graphColoring.generateStateFromFile("/Users/dominik/Projects/GeneralPuzzleSolver/build/classes/generalpuzzlesolver/graph-color-1.txt");
         break;
       default:
         //wrong selection, so start again
@@ -111,10 +114,10 @@ public class GeneralPuzzleSolver {
 
     switch (algorithmIndex) {
       case 1:
-        selectedSearcher = new SimulatedAnnealing(1000);
+        selectedSearcher = new SimulatedAnnealing(10000);
         break;
       case 2:
-        selectedSearcher = new MinConflicts(1000);
+        selectedSearcher = new MinConflicts(10000);
         break;
       default:
         //wrong selection, so start again

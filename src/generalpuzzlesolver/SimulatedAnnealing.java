@@ -31,7 +31,7 @@ public class SimulatedAnnealing extends ConstraintBasedLocalSearch{
     while(evaluationCounter < this.getMaximumSteps() && energy > MAXIMUM_ENERGY){
       temperature = this.calculateTemperature(evaluationCounter/this.getMaximumSteps());
       
-      nextState = this.getStateManager().getNeighbour(currentState);
+      nextState = this.getStateManager().getNeighbour();
       nextEnergy = this.calculateEnergy(nextState);
       
       //missing if here

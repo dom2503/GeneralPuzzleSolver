@@ -16,7 +16,7 @@ public class Conflict{
       return firstVertex;
     }
     
-    public int secondVertex(){
+    public int getSecondVertex(){
       return secondVertex;
     }
   }

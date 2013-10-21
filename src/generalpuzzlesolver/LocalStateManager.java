@@ -9,9 +9,11 @@ public interface LocalStateManager {
   
   public double calculateEnergy(PuzzleState state);
   
-  public PuzzleState getNeighbour(PuzzleState state);
+  public PuzzleState getNeighbour();
   
   abstract public void reset();
   
   public void displayCurrentState();
+  
+  public PuzzleState getCurrentState();
 }
