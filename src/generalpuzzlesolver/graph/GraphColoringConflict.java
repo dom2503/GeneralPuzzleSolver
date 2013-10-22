@@ -3,7 +3,8 @@ package generalpuzzlesolver.graph;
 import generalpuzzlesolver.puzzle.Conflict;
 
 /**
- *
+ * A conflict in graph coloring means two vertices with an edge 
+ * between them that have the same color.
  */
 public class GraphColoringConflict implements Conflict {
 

@@ -22,4 +22,10 @@ public interface PuzzleState {
    * the puzzle are broken.
    */
   public ArrayList<Conflict> getConflicts();
+  
+  /**
+   * Calculates the maximum of conflicts that could occur within this 
+   * puzzle.
+   */
+  public int getMaximumNumberOfConflicts();
 }

@@ -7,8 +7,10 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Represents the graph coloring problem.
@@ -18,7 +20,7 @@ public class GraphColoringStateManager extends LocalStateManager {
   private GraphColoringPuzzleState startingState, currentState;
   private ArrayList<Color> choosableColors;
   private final Random random;
-  private ArrayList<GraphColoringPuzzleState> consideredStates;
+  private Set<GraphColoringPuzzleState> consideredStates;
   public static final ArrayList<Color> DEFAULT_COLORS;
 
   static {
@@ -29,17 +31,11 @@ public class GraphColoringStateManager extends LocalStateManager {
     DEFAULT_COLORS.add(Color.YELLOW);
     DEFAULT_COLORS.add(Color.PINK);
     DEFAULT_COLORS.add(Color.ORANGE);
-    DEFAULT_COLORS.add(Color.CYAN);
-    DEFAULT_COLORS.add(Color.DARK_GRAY);
-    DEFAULT_COLORS.add(Color.BLACK);
-    DEFAULT_COLORS.add(Color.LIGHT_GRAY);
-    DEFAULT_COLORS.add(Color.MAGENTA);
-    DEFAULT_COLORS.add(Color.GRAY);
   }
 
   public GraphColoringStateManager() {
     this.random = new Random();
-    this.consideredStates = new ArrayList<GraphColoringPuzzleState>();
+    this.consideredStates = new HashSet<GraphColoringPuzzleState>();
     this.choosableColors = DEFAULT_COLORS;
   }
 
@@ -55,23 +51,22 @@ public class GraphColoringStateManager extends LocalStateManager {
 
   /**
    * Initializes the graph with the data from the file.
-   * 
+   *
    * @param fileName
    */
   public void generateInitialStateFromFile(String fileName, int scale) {
-    try {  
+    try {
       InputStream in = getClass().getResourceAsStream(fileName);
       Scanner scanner = new Scanner(in);
-      
+
       int numberOfNodes = scanner.nextInt();
       int numberOfEdges = scanner.nextInt();
 
-      GraphColoringPuzzleState puzzleState = new GraphColoringPuzzleState(numberOfNodes);
-      puzzleState.setScale(scale);
-      
+      GraphColoringPuzzleState puzzleState = new GraphColoringPuzzleState(numberOfNodes, scale);
+
       this.readVertices(scanner, numberOfNodes, puzzleState);
       this.readEdges(scanner, numberOfEdges, puzzleState);
-      
+
       this.currentState = puzzleState;
       this.startingState = puzzleState;
     } catch (Exception exception) {
@@ -79,34 +74,35 @@ public class GraphColoringStateManager extends LocalStateManager {
     }
 
   }
-  
+
   /**
    * Parses the specified number of vertices.
    */
-  private void readVertices(Scanner scanner, int numberOfNodes, GraphColoringPuzzleState puzzleState){
+  private void readVertices(Scanner scanner, int numberOfNodes, GraphColoringPuzzleState puzzleState) {
     for (int nodeIndex = 0; nodeIndex < numberOfNodes; nodeIndex++) {
-        int nodeNumber = scanner.nextInt();
-        Point2D.Double position = new Point2D.Double(scanner.nextDouble(), scanner.nextDouble());
-        puzzleState.setVertex(nodeNumber, new Vertex(null, position));
-      }
+      int nodeNumber = scanner.nextInt();
+      Point2D.Double position = new Point2D.Double(scanner.nextDouble(), scanner.nextDouble());
+      puzzleState.setVertex(nodeNumber, new Vertex(null, position));
+    }
   }
-  
+
   /**
    * Parses the specified number of edges from the scanner to the puzzle state.
    */
-  private void readEdges(Scanner scanner, int numberOfEdges, GraphColoringPuzzleState puzzleState){
-      for (int edgeIndex = 0; edgeIndex < numberOfEdges; edgeIndex++) {
-        puzzleState.addBorder(scanner.nextInt(), scanner.nextInt());
-      }
+  private void readEdges(Scanner scanner, int numberOfEdges, GraphColoringPuzzleState puzzleState) {
+    for (int edgeIndex = 0; edgeIndex < numberOfEdges; edgeIndex++) {
+      puzzleState.addBorder(scanner.nextInt(), scanner.nextInt());
+    }
   }
 
   @Override
   public PuzzleState getRandomState() {
     GraphColoringPuzzleState newState = new GraphColoringPuzzleState(this.currentState);
-    
-    int numberOfNodes = this.currentState.getNumberOfVertices();
+
+    int numberOfNodes = newState.getNumberOfVertices();
+
     for (int currentNodeIndex = 0; currentNodeIndex < numberOfNodes; currentNodeIndex++) {
-      newState.getVertexAt(currentNodeIndex).setColor(this.choosableColors.get(random.nextInt(this.choosableColors.size())));
+      newState.getVertexAt(currentNodeIndex).setColor(this.getRandomAllowedColor());
     }
     this.consideredStates.add(this.currentState);
     this.currentState = newState;
@@ -114,35 +110,61 @@ public class GraphColoringStateManager extends LocalStateManager {
     return newState;
   }
 
-  @Override
-  public void displayCurrentState() {
-    this.currentState.display();
+  private Color getRandomAllowedColor() {
+    return this.choosableColors.get(random.nextInt(this.choosableColors.size()));
   }
 
   @Override
-  public PuzzleState getNeighbour() {
-    ArrayList<Conflict> conflicts = this.currentState.getConflicts();
+  public void displayState(PuzzleState state) {
+    state.display();
+  }
 
-    GraphColoringConflict selectedConflict = (GraphColoringConflict) conflicts.get(random.nextInt(conflicts.size()));
-    GraphColoringPuzzleState nextState = new GraphColoringPuzzleState((GraphColoringPuzzleState) this.currentState);
-    Color randomColor = this.choosableColors.get(this.random.nextInt(this.choosableColors.size()));
-    if (random.nextBoolean()) {
-      nextState.getVertexAt(selectedConflict.getFirstVertex()).setColor(randomColor);
-    } else {
-      nextState.getVertexAt(selectedConflict.getSecondVertex()).setColor(randomColor);
+  @Override
+  public PuzzleState getRandomNeighbour(PuzzleState state) {
+    ArrayList<Conflict> conflicts = state.getConflicts();
+    int numberOfConflicts = conflicts.size();
+    GraphColoringPuzzleState nextState = new GraphColoringPuzzleState((GraphColoringPuzzleState) state);
+
+    if (numberOfConflicts > 0) {
+      GraphColoringConflict selectedConflict = (GraphColoringConflict) conflicts.get(random.nextInt(numberOfConflicts));
+      if (random.nextBoolean()) {
+        nextState.getVertexAt(selectedConflict.getFirstVertex()).setColor(this.getRandomAllowedColor());
+      } else {
+        nextState.getVertexAt(selectedConflict.getSecondVertex()).setColor(this.getRandomAllowedColor());
+      }
+      return nextState;
     }
-
-    this.consideredStates.add(this.currentState);
-    this.currentState = nextState;
-    return nextState;
+    return null;
   }
 
   @Override
   public void reset() {
+    this.currentState = startingState;
   }
 
   @Override
-  public PuzzleState getCurrentState() {
+  public PuzzleState getLastUsedState() {
     return this.currentState;
+  }
+
+  @Override
+  public Set<PuzzleState> getAllNeighbors(PuzzleState state) {
+    ArrayList<Conflict> conflicts = state.getConflicts();
+    Set<PuzzleState> neighbors = new HashSet<PuzzleState>();
+
+    GraphColoringConflict selectedConflict;
+    for (Conflict conflict : conflicts) {
+      selectedConflict = (GraphColoringConflict) conflict;
+      GraphColoringPuzzleState nextState;
+      for (Color color : this.choosableColors) {
+        nextState = new GraphColoringPuzzleState((GraphColoringPuzzleState) state);
+        if (!color.equals(nextState.getVertexAt(selectedConflict.getFirstVertex()).getColor())) {
+          nextState.getVertexAt(selectedConflict.getFirstVertex()).setColor(color);
+          neighbors.add(nextState);
+        }
+      }
+    }
+
+    return neighbors;
   }
 }

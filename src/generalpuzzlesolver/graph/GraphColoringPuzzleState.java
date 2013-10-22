@@ -3,6 +3,7 @@ package generalpuzzlesolver.graph;
 import generalpuzzlesolver.puzzle.Conflict;
 import generalpuzzlesolver.puzzle.PuzzleState;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Represents a state of the graph coloring problem.
@@ -15,19 +16,18 @@ public class GraphColoringPuzzleState implements PuzzleState {
   private final Vertex[] vertices;
   private int scale = 1;
 
-  public GraphColoringPuzzleState(int numberOfNodes) {
+  public GraphColoringPuzzleState(int numberOfNodes, int scale) {
     this.vertices = new Vertex[numberOfNodes];
     this.adjacencyMatrix = new boolean[numberOfNodes][numberOfNodes];
     this.initAdjacencyMatrix();
-    this.scale = 1;
+    this.scale = scale;
   }
 
   /**
    * Copy constructor.
    */
   public GraphColoringPuzzleState(GraphColoringPuzzleState blueprint) {
-    this(blueprint.getNumberOfVertices());
-    this.scale = blueprint.scale;
+    this(blueprint.getNumberOfVertices(), blueprint.scale);
     int numberOfNodes = blueprint.getNumberOfVertices();
 
     for (int nodeIndex = 0; nodeIndex < numberOfNodes; nodeIndex++) {
@@ -56,11 +56,18 @@ public class GraphColoringPuzzleState implements PuzzleState {
           }
         }
       }
-
       return true;
     }
 
     return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 47 * hash + Arrays.deepHashCode(this.adjacencyMatrix);
+    hash = 47 * hash + Arrays.deepHashCode(this.vertices);
+    return hash;
   }
 
   public int getNumberOfVertices() {
@@ -87,10 +94,6 @@ public class GraphColoringPuzzleState implements PuzzleState {
         this.adjacencyMatrix[row][column] = false;
       }
     }
-  }
-  
-  public void setScale(int scale){
-    this.scale = scale;
   }
 
   /**
@@ -123,17 +126,8 @@ public class GraphColoringPuzzleState implements PuzzleState {
    */
   @Override
   public boolean isFinal() {
-    int numberOfNodes = this.getNumberOfVertices();
-
-    for (int row = 0; row < numberOfNodes; row++) {
-      for (int column = 0; column < numberOfNodes; column++) {
-        if (this.haveEdgeAndSameColor(row, column)) {
-          return false;
-        }
-      }
-    }
-
-    return true;
+    int numberOfConflicts = this.getConflicts().size();
+    return numberOfConflicts == 0;
   }
 
   public Vertex getVertexAt(int index) {
@@ -157,6 +151,22 @@ public class GraphColoringPuzzleState implements PuzzleState {
     }
 
     return conflicts;
+  }
+  
+  @Override
+  public int getMaximumNumberOfConflicts(){
+    int numberOfNodes = this.getNumberOfVertices();
+    int numberOfEdges = 0;
+    
+    for (int row = 0; row < numberOfNodes; row++) {
+      for (int column = 0; column < numberOfNodes; column++) {
+        if(this.adjacencyMatrix[row][column]){
+          numberOfEdges++;
+        }
+      }
+    }
+    
+    return numberOfEdges;
   }
   
   /**

@@ -22,4 +22,9 @@ public class KQueensPuzzleState implements PuzzleState{
   public ArrayList<Conflict> getConflicts() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
+
+  @Override
+  public int getMaximumNumberOfConflicts() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 }

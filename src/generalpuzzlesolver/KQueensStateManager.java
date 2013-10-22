@@ -6,6 +6,8 @@ package generalpuzzlesolver;
 
 import generalpuzzlesolver.puzzle.PuzzleState;
 import generalpuzzlesolver.puzzle.LocalStateManager;
+import java.util.ArrayList;
+import java.util.Set;
 
 /**
  *
@@ -34,23 +36,30 @@ public class KQueensStateManager extends LocalStateManager{
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
-  @Override
-  public PuzzleState getNeighbour() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
 
   @Override
   public void reset() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
+
   @Override
-  public void displayCurrentState() {
+  public PuzzleState getRandomNeighbour(PuzzleState state) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public PuzzleState getCurrentState() {
+  public void displayState(PuzzleState state) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public PuzzleState getLastUsedState() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Set<PuzzleState> getAllNeighbors(PuzzleState state) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   

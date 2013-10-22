@@ -3,64 +3,65 @@ package generalpuzzlesolver;
 import generalpuzzlesolver.puzzle.PuzzleState;
 
 /**
- * Uses the Simulated Annealing algorithm to solve constraint based puzzles. 
- * 
+ * Uses the Simulated Annealing algorithm to solve constraint based puzzles.
+ *
  * The puzzle should be represented by a specific implementation of a LocalStateManager.
  */
-public class SimulatedAnnealing extends ConstraintBasedLocalSearch{
+public class SimulatedAnnealing extends ConstraintBasedLocalSearch {
+
+  private final static double START_TEMPERATURE = 10.0;
+  private final static double TEMPERATURE_MULTIPLIER = 0.97;
   
-  private static final double MAXIMUM_ENERGY = 1.0;
-  
-  public SimulatedAnnealing(int maximumSteps){
+  public SimulatedAnnealing(int maximumSteps) {
     super(maximumSteps);
   }
-  
-  /**
-   * Based on pseudocode from Wikipedia:
-   * https://en.wikipedia.org/wiki/Simulated_annealing
-   */
+
   @Override
-  public PuzzleState run(){
-    int evaluationCounter = 0;
-    double temperature = -1.0;
-    
+  public PuzzleState run() {
     PuzzleState currentState = this.getStateManager().getRandomState();
-    double energy = this.calculateEnergy(currentState);
-    
-    PuzzleState nextState;
-    double nextEnergy;
-    
-    PuzzleState bestState = currentState;
-    double bestEnergy = -1.0;
-    
-    while(evaluationCounter < this.getMaximumSteps() && energy > MAXIMUM_ENERGY){
-      temperature = this.calculateTemperature(evaluationCounter/this.getMaximumSteps());
-      
-      nextState = this.getStateManager().getNeighbour();
-      nextEnergy = this.calculateEnergy(nextState);
-      
-      //missing if here
-      
-      if(nextEnergy < bestEnergy){
-        bestEnergy = nextEnergy;
-        bestState = nextState;
+    double currentEvaluation = this.evaluate(currentState);
+
+    PuzzleState candidate, bestState = currentState;
+    double candidateEvaluation, bestEvaluation = currentEvaluation;
+
+    //values as proposed here:http://artint.info/html/ArtInt_89.html
+    double temperature = START_TEMPERATURE;
+
+    this.resetStepCount();
+    while (this.getStepCount() < this.getMaximumSteps() && bestEvaluation > 0.0) {
+      temperature *= TEMPERATURE_MULTIPLIER;
+
+      candidate = this.getStateManager().getRandomNeighbour(currentState);
+      candidateEvaluation = this.evaluate(candidate);
+
+      if (this.isAcceptable(candidateEvaluation, currentEvaluation, temperature)) {
+        currentState = candidate;
+        currentEvaluation = candidateEvaluation;
       }
-      
-      evaluationCounter++;
+
+      if (currentEvaluation < bestEvaluation) {
+        bestState = currentState;
+        bestEvaluation = currentEvaluation;
+      }
+
+      this.incrementStepCount();
     }
-    
+
     return bestState;
   }
-  
-  @Override
-  public void reset(){
-    this.getStateManager().reset();
+
+  private boolean isAcceptable(double candidateEvaluation, double currentEvaluation, double temperature) {
+    return candidateEvaluation < currentEvaluation || Math.exp(-(candidateEvaluation - currentEvaluation)/ temperature)
+            > Math.random();
   }
-  
-  protected double calculateTemperature(double input){
-    return 1.0;
-  }
-  protected double calculateEnergy(PuzzleState state){
-    return 1.0;
+
+  private double evaluate(PuzzleState state) {
+    if (state.isFinal()) {
+      return 0.0;
+    } else {
+      double maximumConflicts = state.getMaximumNumberOfConflicts();
+      double numberOfConflicts= state.getConflicts().size();
+      return numberOfConflicts / maximumConflicts;
+    }
   }
 }

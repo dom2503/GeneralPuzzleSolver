@@ -3,6 +3,7 @@ package generalpuzzlesolver;
 import generalpuzzlesolver.puzzle.PuzzleState;
 import generalpuzzlesolver.puzzle.LocalStateManager;
 import generalpuzzlesolver.graph.GraphColoringStateManager;
+import generalpuzzlesolver.sudoku.SudokuStateManager;
 import java.util.Scanner;
 
 /**
@@ -44,11 +45,15 @@ public class GeneralPuzzleSolver {
     this.resetStatistics();
 
     PuzzleState currentSolution;
-    
+
     for (int i = 0; i < this.numberOfRuns; i++) {
       currentSolution = this.searcher.run();
+      if(this.numberOfRuns == 1){
         currentSolution.display();
-        System.out.println("Number of conflicts: " + currentSolution.getConflicts().size());
+      }
+      System.out.println("Used Steps: " + this.searcher.getStepCount());
+      System.out.println("Number of conflicts: " + currentSolution.getConflicts().size());
+      this.searcher.reset();
     }
   }
 
@@ -74,7 +79,7 @@ public class GeneralPuzzleSolver {
     System.out.println("Which puzzle would you like to use?");
     System.out.println("1. k-Queens");
     System.out.println("2. Graph Coloring");
-    System.out.println("3. Fillomino");
+    System.out.println("3. Sudoku");
 
     int puzzleIndex = this.readIntInRange(1, 2);
 
@@ -88,10 +93,10 @@ public class GeneralPuzzleSolver {
         GraphColoringStateManager graphColoring = new GraphColoringStateManager();
         String graphDataFile = "";
         int scale = 1;
-        
-        switch(this.selectDifficulty()){
+
+        switch (this.selectDifficulty()) {
           case 1:
-            graphDataFile =  "graph-color-1.txt";
+            graphDataFile = "graph-color-1.txt";
             scale = 30;
             break;
           case 2:
@@ -107,7 +112,7 @@ public class GeneralPuzzleSolver {
         selectedPuzzle = graphColoring;
         break;
       case 3:
-        selectedPuzzle = new FillominoStateManager();
+        selectedPuzzle = new SudokuStateManager();
         break;
       default:
         //wrong selection, so start again
@@ -117,15 +122,15 @@ public class GeneralPuzzleSolver {
 
     return selectedPuzzle;
   }
-  
-  private int selectDifficulty(){
-     System.out.println("Please select the difficulty (1-3):");       
-     int difficulty = this.scanner.nextInt();
-     if(difficulty < 0 || difficulty > 3){
-       System.out.println("Your selection was not in the proper range.");
-       difficulty = this.selectDifficulty();
-     }
-     return difficulty;
+
+  private int selectDifficulty() {
+    System.out.println("Please select the difficulty (1-3):");
+    int difficulty = this.scanner.nextInt();
+    if (difficulty < 0 || difficulty > 3) {
+      System.out.println("Your selection was not in the proper range.");
+      difficulty = this.selectDifficulty();
+    }
+    return difficulty;
   }
 
   private int chooseNumberOfRuns() {
@@ -143,7 +148,7 @@ public class GeneralPuzzleSolver {
     System.out.println("2. Min-Conflicts");
 
     int algorithmIndex = this.readIntInRange(1, 2);
-
+    
     ConstraintBasedLocalSearch selectedSearcher;
 
     switch (algorithmIndex) {
