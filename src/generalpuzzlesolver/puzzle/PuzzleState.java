@@ -1,9 +1,9 @@
-package generalpuzzlesolver;
+package generalpuzzlesolver.puzzle;
 
 import java.util.ArrayList;
 
 /**
- *
+ * The state of some kind of constraint based puzzle.
  */
 public interface PuzzleState {
   
@@ -17,5 +17,9 @@ public interface PuzzleState {
    */
   public boolean isFinal();
   
+  /**
+   * Returns a list of all the areas of this state where the constraints of 
+   * the puzzle are broken.
+   */
   public ArrayList<Conflict> getConflicts();
 }

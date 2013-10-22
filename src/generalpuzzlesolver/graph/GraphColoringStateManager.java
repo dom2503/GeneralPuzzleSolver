@@ -1,20 +1,24 @@
-package generalpuzzlesolver;
+package generalpuzzlesolver.graph;
 
+import generalpuzzlesolver.puzzle.Conflict;
+import generalpuzzlesolver.puzzle.LocalStateManager;
+import generalpuzzlesolver.puzzle.PuzzleState;
 import java.awt.Color;
 import java.awt.geom.Point2D;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Provides methods
+ * Represents the graph coloring problem.
  */
-public class GraphColoringStateManager implements LocalStateManager {
+public class GraphColoringStateManager extends LocalStateManager {
 
-  private GraphColoringPuzzleState currentState;
+  private GraphColoringPuzzleState startingState, currentState;
   private ArrayList<Color> choosableColors;
+  private final Random random;
+  private ArrayList<GraphColoringPuzzleState> consideredStates;
   public static final ArrayList<Color> DEFAULT_COLORS;
 
   static {
@@ -32,9 +36,6 @@ public class GraphColoringStateManager implements LocalStateManager {
     DEFAULT_COLORS.add(Color.MAGENTA);
     DEFAULT_COLORS.add(Color.GRAY);
   }
-  ;
-  private final Random random;
-  private ArrayList<GraphColoringPuzzleState> consideredStates;
 
   public GraphColoringStateManager() {
     this.random = new Random();
@@ -53,44 +54,59 @@ public class GraphColoringStateManager implements LocalStateManager {
   }
 
   /**
-   *
+   * Initializes the graph with the data from the file.
+   * 
    * @param fileName
    */
-  public void generateStateFromFile(String fileName) {
-    try {
-      Scanner scanner = new Scanner(new File(fileName));
+  public void generateInitialStateFromFile(String fileName, int scale) {
+    try {  
+      InputStream in = getClass().getResourceAsStream(fileName);
+      Scanner scanner = new Scanner(in);
+      
       int numberOfNodes = scanner.nextInt();
       int numberOfEdges = scanner.nextInt();
 
       GraphColoringPuzzleState puzzleState = new GraphColoringPuzzleState(numberOfNodes);
-
-      //read positions
-      for (int nodeIndex = 0; nodeIndex < numberOfNodes; nodeIndex++) {
-        Color pointColor = this.choosableColors.get(this.random.nextInt(this.choosableColors.size()));
-        int nodeNumber = scanner.nextInt();
-        Point2D.Double position = new Point2D.Double(scanner.nextDouble(), scanner.nextDouble());
-        puzzleState.setVertex(nodeNumber, new Vertex(pointColor, position));
-      }
-
-      //read in edges
-      for (int edgeIndex = 0; edgeIndex < numberOfEdges; edgeIndex++) {
-        int row = scanner.nextInt();
-        int column = scanner.nextInt();
-        puzzleState.addBorder(row, column);
-      }
-
+      puzzleState.setScale(scale);
+      
+      this.readVertices(scanner, numberOfNodes, puzzleState);
+      this.readEdges(scanner, numberOfEdges, puzzleState);
+      
       this.currentState = puzzleState;
-    } catch (FileNotFoundException exception) {
+      this.startingState = puzzleState;
+    } catch (Exception exception) {
+      System.out.println(exception.getMessage());
     }
 
   }
+  
+  /**
+   * Parses the specified number of vertices.
+   */
+  private void readVertices(Scanner scanner, int numberOfNodes, GraphColoringPuzzleState puzzleState){
+    for (int nodeIndex = 0; nodeIndex < numberOfNodes; nodeIndex++) {
+        int nodeNumber = scanner.nextInt();
+        Point2D.Double position = new Point2D.Double(scanner.nextDouble(), scanner.nextDouble());
+        puzzleState.setVertex(nodeNumber, new Vertex(null, position));
+      }
+  }
+  
+  /**
+   * Parses the specified number of edges from the scanner to the puzzle state.
+   */
+  private void readEdges(Scanner scanner, int numberOfEdges, GraphColoringPuzzleState puzzleState){
+      for (int edgeIndex = 0; edgeIndex < numberOfEdges; edgeIndex++) {
+        puzzleState.addBorder(scanner.nextInt(), scanner.nextInt());
+      }
+  }
 
   @Override
-  public PuzzleState getNextRandomState() {
-    int numberOfNodes = this.currentState.getNumberOfVertices();
+  public PuzzleState getRandomState() {
     GraphColoringPuzzleState newState = new GraphColoringPuzzleState(this.currentState);
+    
+    int numberOfNodes = this.currentState.getNumberOfVertices();
     for (int currentNodeIndex = 0; currentNodeIndex < numberOfNodes; currentNodeIndex++) {
-      this.currentState.setVertexColor(currentNodeIndex, this.choosableColors.get(random.nextInt(this.choosableColors.size())));
+      newState.getVertexAt(currentNodeIndex).setColor(this.choosableColors.get(random.nextInt(this.choosableColors.size())));
     }
     this.consideredStates.add(this.currentState);
     this.currentState = newState;
@@ -104,21 +120,16 @@ public class GraphColoringStateManager implements LocalStateManager {
   }
 
   @Override
-  public double calculateEnergy(PuzzleState state) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
   public PuzzleState getNeighbour() {
     ArrayList<Conflict> conflicts = this.currentState.getConflicts();
 
-    Conflict selectedConflict = conflicts.get(random.nextInt(conflicts.size()));
+    GraphColoringConflict selectedConflict = (GraphColoringConflict) conflicts.get(random.nextInt(conflicts.size()));
     GraphColoringPuzzleState nextState = new GraphColoringPuzzleState((GraphColoringPuzzleState) this.currentState);
     Color randomColor = this.choosableColors.get(this.random.nextInt(this.choosableColors.size()));
     if (random.nextBoolean()) {
-      nextState.setVertexColor(selectedConflict.getFirstVertex(), randomColor);
+      nextState.getVertexAt(selectedConflict.getFirstVertex()).setColor(randomColor);
     } else {
-      nextState.setVertexColor(selectedConflict.getSecondVertex(), randomColor);
+      nextState.getVertexAt(selectedConflict.getSecondVertex()).setColor(randomColor);
     }
 
     this.consideredStates.add(this.currentState);
@@ -128,7 +139,6 @@ public class GraphColoringStateManager implements LocalStateManager {
 
   @Override
   public void reset() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override

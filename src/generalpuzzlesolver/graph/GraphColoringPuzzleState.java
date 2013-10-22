@@ -1,6 +1,7 @@
-package generalpuzzlesolver;
+package generalpuzzlesolver.graph;
 
-import java.awt.Color;
+import generalpuzzlesolver.puzzle.Conflict;
+import generalpuzzlesolver.puzzle.PuzzleState;
 import java.util.ArrayList;
 
 /**
@@ -12,12 +13,13 @@ public class GraphColoringPuzzleState implements PuzzleState {
 
   private final boolean[][] adjacencyMatrix;
   private final Vertex[] vertices;
+  private int scale = 1;
 
   public GraphColoringPuzzleState(int numberOfNodes) {
     this.vertices = new Vertex[numberOfNodes];
-
     this.adjacencyMatrix = new boolean[numberOfNodes][numberOfNodes];
     this.initAdjacencyMatrix();
+    this.scale = 1;
   }
 
   /**
@@ -25,6 +27,7 @@ public class GraphColoringPuzzleState implements PuzzleState {
    */
   public GraphColoringPuzzleState(GraphColoringPuzzleState blueprint) {
     this(blueprint.getNumberOfVertices());
+    this.scale = blueprint.scale;
     int numberOfNodes = blueprint.getNumberOfVertices();
 
     for (int nodeIndex = 0; nodeIndex < numberOfNodes; nodeIndex++) {
@@ -85,6 +88,10 @@ public class GraphColoringPuzzleState implements PuzzleState {
       }
     }
   }
+  
+  public void setScale(int scale){
+    this.scale = scale;
+  }
 
   /**
    * Creates a border between the two given indexes of vertices. The vertices can be thought of as
@@ -98,16 +105,6 @@ public class GraphColoringPuzzleState implements PuzzleState {
     adjacencyMatrix[secondVertex][firstVertex] = true;
   }
 
-  /**
-   * Sets the color of the vertex at the given index.
-   *
-   * @param index
-   * @param color
-   */
-  public void setVertexColor(int index, Color color) {
-    this.vertices[index].setColor(color);
-  }
-
   public void setVertex(int index, Vertex vertex) {
     this.vertices[index] = vertex;
   }
@@ -117,7 +114,7 @@ public class GraphColoringPuzzleState implements PuzzleState {
    */
   @Override
   public void display() {
-    GraphPainter frame = new GraphPainter(this);
+    GraphPainter frame = new GraphPainter(this, this.scale);
     frame.setVisible(true);
   }
 
@@ -154,7 +151,7 @@ public class GraphColoringPuzzleState implements PuzzleState {
     for (int row = 0; row < numberOfNodes; row++) {
       for (int column = 0; column < numberOfNodes; column++) {
         if (this.haveEdgeAndSameColor(row, column)) {
-          conflicts.add(new Conflict(row, column));
+          conflicts.add(new GraphColoringConflict(row, column));
         }
       }
     }

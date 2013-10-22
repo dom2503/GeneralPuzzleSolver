@@ -1,5 +1,8 @@
 package generalpuzzlesolver;
 
+import generalpuzzlesolver.puzzle.PuzzleState;
+import generalpuzzlesolver.puzzle.LocalStateManager;
+import generalpuzzlesolver.graph.GraphColoringStateManager;
 import java.util.Scanner;
 
 /**
@@ -71,6 +74,7 @@ public class GeneralPuzzleSolver {
     System.out.println("Which puzzle would you like to use?");
     System.out.println("1. k-Queens");
     System.out.println("2. Graph Coloring");
+    System.out.println("3. Fillomino");
 
     int puzzleIndex = this.readIntInRange(1, 2);
 
@@ -82,8 +86,28 @@ public class GeneralPuzzleSolver {
         break;
       case 2:
         GraphColoringStateManager graphColoring = new GraphColoringStateManager();
+        String graphDataFile = "";
+        int scale = 1;
+        
+        switch(this.selectDifficulty()){
+          case 1:
+            graphDataFile =  "graph-color-1.txt";
+            scale = 30;
+            break;
+          case 2:
+            graphDataFile = "graph-color-2.txt";
+            scale = 5;
+            break;
+          case 3:
+            graphDataFile = "graph-color-3.txt";
+            scale = 1;
+            break;
+        }
+        graphColoring.generateInitialStateFromFile(graphDataFile, scale);
         selectedPuzzle = graphColoring;
-        graphColoring.generateStateFromFile("/Users/dominik/Projects/GeneralPuzzleSolver/build/classes/generalpuzzlesolver/graph-color-1.txt");
+        break;
+      case 3:
+        selectedPuzzle = new FillominoStateManager();
         break;
       default:
         //wrong selection, so start again
@@ -92,6 +116,16 @@ public class GeneralPuzzleSolver {
     }
 
     return selectedPuzzle;
+  }
+  
+  private int selectDifficulty(){
+     System.out.println("Please select the difficulty (1-3):");       
+     int difficulty = this.scanner.nextInt();
+     if(difficulty < 0 || difficulty > 3){
+       System.out.println("Your selection was not in the proper range.");
+       difficulty = this.selectDifficulty();
+     }
+     return difficulty;
   }
 
   private int chooseNumberOfRuns() {

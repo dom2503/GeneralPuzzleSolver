@@ -1,5 +1,7 @@
 package generalpuzzlesolver;
 
+import generalpuzzlesolver.puzzle.PuzzleState;
+import generalpuzzlesolver.puzzle.Conflict;
 import java.util.ArrayList;
 
 /**

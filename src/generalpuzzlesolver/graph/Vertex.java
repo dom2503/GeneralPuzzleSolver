@@ -1,10 +1,10 @@
-package generalpuzzlesolver;
+package generalpuzzlesolver.graph;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
 /**
- * Represents a vertex in a Graph.
+ * Represents a colored vertex in a Graph.
  */
 public class Vertex {
 
@@ -26,15 +26,11 @@ public class Vertex {
   }
 
   public void setColor(Color color) {
-    this.color = color;
+      this.color = color;
   }
 
   public Point2D getPosition() {
     return this.position;
-  }
-
-  public void setPosition(Point2D position) {
-    this.position = position;
   }
   
   @Override

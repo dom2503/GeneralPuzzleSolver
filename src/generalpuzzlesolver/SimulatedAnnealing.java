@@ -1,7 +1,11 @@
 package generalpuzzlesolver;
 
+import generalpuzzlesolver.puzzle.PuzzleState;
+
 /**
- *
+ * Uses the Simulated Annealing algorithm to solve constraint based puzzles. 
+ * 
+ * The puzzle should be represented by a specific implementation of a LocalStateManager.
  */
 public class SimulatedAnnealing extends ConstraintBasedLocalSearch{
   
@@ -15,11 +19,12 @@ public class SimulatedAnnealing extends ConstraintBasedLocalSearch{
    * Based on pseudocode from Wikipedia:
    * https://en.wikipedia.org/wiki/Simulated_annealing
    */
+  @Override
   public PuzzleState run(){
     int evaluationCounter = 0;
     double temperature = -1.0;
     
-    PuzzleState currentState = this.getStateManager().getNextRandomState();
+    PuzzleState currentState = this.getStateManager().getRandomState();
     double energy = this.calculateEnergy(currentState);
     
     PuzzleState nextState;
@@ -47,8 +52,9 @@ public class SimulatedAnnealing extends ConstraintBasedLocalSearch{
     return bestState;
   }
   
+  @Override
   public void reset(){
-    
+    this.getStateManager().reset();
   }
   
   protected double calculateTemperature(double input){
