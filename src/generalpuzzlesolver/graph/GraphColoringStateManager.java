@@ -52,17 +52,20 @@ public class GraphColoringStateManager extends LocalStateManager {
   /**
    * Initializes the graph with the data from the file.
    *
-   * @param fileName
+   * @param parameters Expects to be parameter one a String of
+   * the filename and the second and int for the scale to point
+   * the graph.
    */
-  public void generateInitialStateFromFile(String fileName, int scale) {
+  @Override
+  public void initialize(Object[] parameters) {
     try {
-      InputStream in = getClass().getResourceAsStream(fileName);
+      InputStream in = getClass().getResourceAsStream((String) parameters[0]);
       Scanner scanner = new Scanner(in);
 
       int numberOfNodes = scanner.nextInt();
       int numberOfEdges = scanner.nextInt();
 
-      GraphColoringPuzzleState puzzleState = new GraphColoringPuzzleState(numberOfNodes, scale);
+      GraphColoringPuzzleState puzzleState = new GraphColoringPuzzleState(numberOfNodes, (Integer) parameters[1]);
 
       this.readVertices(scanner, numberOfNodes, puzzleState);
       this.readEdges(scanner, numberOfEdges, puzzleState);
@@ -140,31 +143,5 @@ public class GraphColoringStateManager extends LocalStateManager {
   @Override
   public void reset() {
     this.currentState = startingState;
-  }
-
-  @Override
-  public PuzzleState getLastUsedState() {
-    return this.currentState;
-  }
-
-  @Override
-  public Set<PuzzleState> getAllNeighbors(PuzzleState state) {
-    ArrayList<Conflict> conflicts = state.getConflicts();
-    Set<PuzzleState> neighbors = new HashSet<PuzzleState>();
-
-    GraphColoringConflict selectedConflict;
-    for (Conflict conflict : conflicts) {
-      selectedConflict = (GraphColoringConflict) conflict;
-      GraphColoringPuzzleState nextState;
-      for (Color color : this.choosableColors) {
-        nextState = new GraphColoringPuzzleState((GraphColoringPuzzleState) state);
-        if (!color.equals(nextState.getVertexAt(selectedConflict.getFirstVertex()).getColor())) {
-          nextState.getVertexAt(selectedConflict.getFirstVertex()).setColor(color);
-          neighbors.add(nextState);
-        }
-      }
-    }
-
-    return neighbors;
   }
 }

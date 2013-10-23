@@ -81,7 +81,7 @@ public class GeneralPuzzleSolver {
     System.out.println("2. Graph Coloring");
     System.out.println("3. Sudoku");
 
-    int puzzleIndex = this.readIntInRange(1, 2);
+    int puzzleIndex = this.readIntInRange(1, 3);
 
     LocalStateManager selectedPuzzle;
 
@@ -108,11 +108,17 @@ public class GeneralPuzzleSolver {
             scale = 1;
             break;
         }
-        graphColoring.generateInitialStateFromFile(graphDataFile, scale);
+        Object[] parameters = new Object[2];
+        parameters[0] = graphDataFile;
+        parameters[1] = scale;
+        graphColoring.initialize(parameters);
         selectedPuzzle = graphColoring;
         break;
       case 3:
         selectedPuzzle = new SudokuStateManager();
+        Object[] sudokuParameters = new Object[1];
+        sudokuParameters[0] = this.selectDifficulty();
+        selectedPuzzle.initialize(sudokuParameters);
         break;
       default:
         //wrong selection, so start again
@@ -153,10 +159,10 @@ public class GeneralPuzzleSolver {
 
     switch (algorithmIndex) {
       case 1:
-        selectedSearcher = new SimulatedAnnealing(10000);
+        selectedSearcher = new SimulatedAnnealing(10000000);
         break;
       case 2:
-        selectedSearcher = new MinConflicts(10000);
+        selectedSearcher = new MinConflicts(10000000);
         break;
       default:
         //wrong selection, so start again

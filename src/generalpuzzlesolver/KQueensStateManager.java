@@ -54,12 +54,7 @@ public class KQueensStateManager extends LocalStateManager{
   }
 
   @Override
-  public PuzzleState getLastUsedState() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Set<PuzzleState> getAllNeighbors(PuzzleState state) {
+  public void initialize(Object[] parameters) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
