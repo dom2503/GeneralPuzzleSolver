@@ -45,5 +45,8 @@ abstract public class ConstraintBasedLocalSearch {
   
   abstract public PuzzleState run();
   
-  abstract public void reset();
+  public void reset(){
+    this.stateManager.reset();
+    this.resetStepCount();
+  }
 }

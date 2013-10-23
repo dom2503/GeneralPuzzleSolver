@@ -44,4 +44,12 @@ public class Vertex {
     }
     return false;
   }
+
+  @Override
+  public int hashCode() {
+    int hash = 3;
+    hash = 97 * hash + (this.color != null ? this.color.hashCode() : 0);
+    hash = 97 * hash + (this.position != null ? this.position.hashCode() : 0);
+    return hash;
+  }
 }

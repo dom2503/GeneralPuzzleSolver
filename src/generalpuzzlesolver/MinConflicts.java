@@ -14,7 +14,8 @@ public class MinConflicts extends ConstraintBasedLocalSearch {
   }
 
   /**
-   * The implementation of this algorithm is based on pseudocode from Wikipedia:
+   * The implementation of this algorithm is based on pseudocode 
+   * from Wikipedia:
    * 
    * https://en.wikipedia.org/w/index.php?title=Min-conflicts_algorithm&oldid=548827708
    */
@@ -28,7 +29,7 @@ public class MinConflicts extends ConstraintBasedLocalSearch {
       if (currentState != null && currentState.isFinal()) {
         return currentState;
       }
-      nextState = this.getStateManager().getNeighbour();
+      nextState = this.getStateManager().getRandomNeighbour(currentState);
       if (this.hasLowerConflicts(currentState, nextState)) {
         currentState = nextState;
       }
@@ -38,14 +39,13 @@ public class MinConflicts extends ConstraintBasedLocalSearch {
     return currentState;
   }
 
+  /**
+   * Checks whether the state to evaluate has less conflicts than the 
+   * other one.
+   */
   private boolean hasLowerConflicts(PuzzleState oldBest, PuzzleState evaluate) {
     return oldBest != null
             && evaluate != null
             && evaluate.getConflicts().size() < oldBest.getConflicts().size();
-  }
-
-  @Override
-  public void reset() {
-    this.getStateManager().reset();
   }
 }
