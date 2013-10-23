@@ -83,6 +83,7 @@ public class GeneralPuzzleSolver {
     switch (puzzleIndex) {
       case 1:
         selectedPuzzle = new KQueensStateManager();
+        
         break;
       case 2:
         GraphColoringStateManager graphColoring = new GraphColoringStateManager();
