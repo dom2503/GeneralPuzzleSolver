@@ -73,6 +73,8 @@
 \newcommand{\hmwkClassInstructor}{Lecturer: Keith Downing} % Teacher/lecturer
 \newcommand{\hmwkAuthorName}{Pablo Liste Garcia \& Dominik Horb} % Your name
 
+
+\usepackage{tabularx}
 %----------------------------------------------------------------------------------------
 % TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -144,7 +146,18 @@ To provide an example: In case of the graph colouring problem, it contains an ad
 
 The \textit{PuzzleStateManager} will be a stateless object in most cases, that just takes \textit{PuzzleState} objects into it's methods and changes them to some kind of ruleset provided inside the method.
 
+\section{First Puzzle: k-Queens}
 
+\begin{tabularx}{\textwidth}{l | X | X | X | X | X | X}
+Combination & Evaluation  \newline Average & - \newline SD & - \newline Best & Steps \newline Average & - \newline SD & - \newline Lowest \\
+\hline
+Easy / SA & 0 & 18 & 2 & 6 & 4 & 5 \\
+Medium / SA & 0 & 18 & 2 & 6 & 4 & 5  \\
+Hard / SA & 0 & 18 & 2 & 6 & 4 & 5  \\
+Easy / MC & 0 & 18 & 2 & 6 & 4 & 5  \\
+Medium / MC & 0 & 18 & 2 & 6 & 4 & 5  \\
+Hard / SA & 0 & 18 & 2 & 6 & 4 & 5  \\
+\end{tabularx}
 
 \section{Third Puzzle: Sudoku}
 

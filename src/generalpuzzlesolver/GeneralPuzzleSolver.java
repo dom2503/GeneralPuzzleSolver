@@ -43,7 +43,7 @@ public class GeneralPuzzleSolver {
     this.puzzle = this.choosePuzzle();
     this.searcher = this.chooseSearchAlgorithm();
     this.searcher.setStateManager(this.puzzle);
-    
+
     this.numberOfRuns = this.chooseNumberOfRuns();
     this.stepsTaken = new int[this.numberOfRuns];
     this.evaluations = new double[this.numberOfRuns];
@@ -52,53 +52,64 @@ public class GeneralPuzzleSolver {
 
     for (int i = 0; i < this.numberOfRuns; i++) {
       currentSolution = this.searcher.run();
-      if(this.numberOfRuns == 1){
+      if (this.numberOfRuns == 1) {
         currentSolution.display();
       }
       this.stepsTaken[i] = this.searcher.getStepCount();
-      
+
       this.evaluations[i] = this.puzzle.evaluate(currentSolution);
       System.out.println(this.evaluations[i]);
       System.out.println("Used Steps: " + this.searcher.getStepCount());
       System.out.println("Number of conflicts: " + currentSolution.getConflicts().size());
       this.searcher.reset();
     }
-    
+
     System.out.println();
     this.printStatistics();
   }
 
   private void printStatistics() {
     double sum = 0;
-    for(int steps : this.stepsTaken){
-      sum +=steps;
+    double best = Double.MAX_VALUE;
+    for (int steps : this.stepsTaken) {
+      sum += steps;
+      if (steps < best) {
+        best = steps;
+      }
     }
     double average = sum / this.numberOfRuns;
     System.out.println("The average of steps is: " + average);
+    System.out.println("The lowest step count is: " + best);
     
     double sumOfDifferences = 0;
-    for(int steps : this.stepsTaken){
-      sumOfDifferences += Math.pow(steps-average, 2);
+    for (int steps : this.stepsTaken) {
+      sumOfDifferences += Math.pow(steps - average, 2);
     }
-    
-    double standardDeviation = Math.sqrt(sumOfDifferences/this.numberOfRuns);
-    
+
+    double standardDeviation = Math.sqrt(sumOfDifferences / this.numberOfRuns);
+
     System.out.println("The standard deviation of steps is: " + standardDeviation);
+
     
     double sumEvaluations = 0;
-    for(double evaluation : this.evaluations){
-      sumEvaluations +=evaluation;
+    double bestEvaluation = Double.MAX_VALUE;
+    for (double evaluation : this.evaluations) {
+      sumEvaluations += evaluation;
+      if (bestEvaluation > evaluation) {
+        bestEvaluation = evaluation;
+      }
     }
     double averageEvaluations = sumEvaluations / this.numberOfRuns;
     System.out.println("The average of evaluations is: " + averageEvaluations);
-    
+    System.out.println("The best evaluation is: " + bestEvaluation);
+
     double sumOfEvaluationDifferences = 0.0;
-    for(double evaluation : this.evaluations){
-      sumOfEvaluationDifferences += Math.pow(evaluation-averageEvaluations, 2);
+    for (double evaluation : this.evaluations) {
+      sumOfEvaluationDifferences += Math.pow(evaluation - averageEvaluations, 2);
     }
-    
-    double standardDeviationEvaluation = Math.sqrt(sumOfEvaluationDifferences/this.numberOfRuns);
-    
+
+    double standardDeviationEvaluation = Math.sqrt(sumOfEvaluationDifferences / this.numberOfRuns);
+
     System.out.println("The standard deviation of evaluations is: " + standardDeviationEvaluation);
   }
 
@@ -132,7 +143,7 @@ public class GeneralPuzzleSolver {
         System.out.println("How many queens should be placed?");
         int numberOfQueens = this.scanner.nextInt();
         selectedPuzzle = new KQueensStateManager(numberOfQueens);
-        
+
         break;
       case 2:
         GraphColoringStateManager graphColoring = new GraphColoringStateManager();
@@ -199,7 +210,7 @@ public class GeneralPuzzleSolver {
     System.out.println("2. Min-Conflicts");
 
     int algorithmIndex = this.readIntInRange(1, 2);
-    
+
     ConstraintBasedLocalSearch selectedSearcher;
 
     switch (algorithmIndex) {

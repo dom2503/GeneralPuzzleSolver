@@ -166,42 +166,37 @@
         <text>run%28%29</text>
       </controlProperties>
     </control>
-    <control controlID="36" controlTypeID="com.balsamiq.mockups::Label" x="116" y="418" w="-1" h="-1" measuredW="243" measuredH="21" zOrder="28" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>abstract%20PuzzleState%20getRandomState%28%29%3B</text>
-      </controlProperties>
-    </control>
-    <control controlID="37" controlTypeID="com.balsamiq.mockups::Label" x="114" y="441" w="-1" h="-1" measuredW="214" measuredH="21" zOrder="29" locked="false" isInGroup="-1">
+    <control controlID="37" controlTypeID="com.balsamiq.mockups::Label" x="114" y="441" w="-1" h="-1" measuredW="214" measuredH="21" zOrder="28" locked="false" isInGroup="-1">
       <controlProperties>
         <text>double%20evaluate%28PuzzleState%20state%29%7B</text>
       </controlProperties>
     </control>
-    <control controlID="38" controlTypeID="com.balsamiq.mockups::Label" x="114" y="465" w="-1" h="-1" measuredW="243" measuredH="21" zOrder="30" locked="false" isInGroup="-1">
+    <control controlID="38" controlTypeID="com.balsamiq.mockups::Label" x="114" y="465" w="-1" h="-1" measuredW="243" measuredH="21" zOrder="29" locked="false" isInGroup="-1">
       <controlProperties>
         <text>abstract%20PuzzleState%20getRandomState%28%29%3B</text>
       </controlProperties>
     </control>
-    <control controlID="39" controlTypeID="com.balsamiq.mockups::Label" x="116" y="513" w="-1" h="-1" measuredW="382" measuredH="21" zOrder="31" locked="false" isInGroup="-1">
+    <control controlID="39" controlTypeID="com.balsamiq.mockups::Label" x="116" y="513" w="-1" h="-1" measuredW="382" measuredH="21" zOrder="30" locked="false" isInGroup="-1">
       <controlProperties>
         <text>abstract%20PuzzleState%20getRandomNeighbour%28PuzzleState%20state%29%3B%20</text>
       </controlProperties>
     </control>
-    <control controlID="40" controlTypeID="com.balsamiq.mockups::Label" x="116" y="488" w="-1" h="-1" measuredW="366" measuredH="21" zOrder="32" locked="false" isInGroup="-1">
+    <control controlID="40" controlTypeID="com.balsamiq.mockups::Label" x="116" y="488" w="-1" h="-1" measuredW="366" measuredH="21" zOrder="31" locked="false" isInGroup="-1">
       <controlProperties>
         <text>abstract%20PuzzleState%20getSmartNeighbour%28PuzzleState%20state%29%3B</text>
       </controlProperties>
     </control>
-    <control controlID="41" controlTypeID="com.balsamiq.mockups::Label" x="511" y="461" w="-1" h="-1" measuredW="100" measuredH="21" zOrder="33" locked="false" isInGroup="-1">
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Label" x="511" y="461" w="-1" h="-1" measuredW="100" measuredH="21" zOrder="32" locked="false" isInGroup="-1">
       <controlProperties>
         <text>boolean%20isFinal%28%29%3B</text>
       </controlProperties>
     </control>
-    <control controlID="42" controlTypeID="com.balsamiq.mockups::Label" x="511" y="487" w="-1" h="-1" measuredW="205" measuredH="21" zOrder="34" locked="false" isInGroup="-1">
+    <control controlID="42" controlTypeID="com.balsamiq.mockups::Label" x="511" y="487" w="-1" h="-1" measuredW="205" measuredH="21" zOrder="33" locked="false" isInGroup="-1">
       <controlProperties>
         <text>ArrayList%3CConflict%3E%20getConflicts%28%29%3B</text>
       </controlProperties>
     </control>
-    <control controlID="43" controlTypeID="com.balsamiq.mockups::Label" x="511" y="513" w="-1" h="-1" measuredW="220" measuredH="21" zOrder="35" locked="false" isInGroup="-1">
+    <control controlID="43" controlTypeID="com.balsamiq.mockups::Label" x="511" y="513" w="-1" h="-1" measuredW="220" measuredH="21" zOrder="34" locked="false" isInGroup="-1">
       <controlProperties>
         <text>int%20getMaximumNumberOfConflicts%28%29%3B</text>
       </controlProperties>
