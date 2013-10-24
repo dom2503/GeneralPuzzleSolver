@@ -25,6 +25,8 @@ abstract public class LocalStateManager {
    */
   abstract public PuzzleState getRandomNeighbour(PuzzleState state);
   
+  abstract public PuzzleState getSmartNeighbour(PuzzleState state);
+  
   /**
    * Resets this state manager so that it can be restarted.
    */

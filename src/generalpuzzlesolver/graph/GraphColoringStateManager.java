@@ -30,7 +30,6 @@ public class GraphColoringStateManager extends LocalStateManager {
     DEFAULT_COLORS.add(Color.GREEN);
     DEFAULT_COLORS.add(Color.YELLOW);
     DEFAULT_COLORS.add(Color.PINK);
-    DEFAULT_COLORS.add(Color.ORANGE);
   }
 
   public GraphColoringStateManager() {
@@ -143,5 +142,10 @@ public class GraphColoringStateManager extends LocalStateManager {
   @Override
   public void reset() {
     this.currentState = startingState;
+  }
+
+  @Override
+  public PuzzleState getSmartNeighbour(PuzzleState state) {
+    return this.getRandomNeighbour(state);
   }
 }

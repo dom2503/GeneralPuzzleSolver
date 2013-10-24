@@ -163,7 +163,7 @@ public class GeneralPuzzleSolver {
         selectedSearcher = new SimulatedAnnealing(1000000);
         break;
       case 2:
-        selectedSearcher = new MinConflicts(100000);
+        selectedSearcher = new MinConflicts(5000000);
         break;
       default:
         //wrong selection, so start again

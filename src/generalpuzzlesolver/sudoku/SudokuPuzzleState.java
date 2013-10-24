@@ -65,6 +65,7 @@ public class SudokuPuzzleState implements PuzzleState {
       }
       System.out.println();
     }
+    System.out.println();
   }
 
   @Override
@@ -88,11 +89,13 @@ public class SudokuPuzzleState implements PuzzleState {
 
   private void findConflictsInRowAndColumn(int originalRow, int originalColumn, ArrayList<Conflict> conflicts) {
     for (int i = 0; i < PUZZLE_SIZE; i++) {
-      if (originalColumn != i && this.puzzle[originalRow][originalColumn] == this.puzzle[i][originalColumn]) {
-        conflicts.add(new SudokuConflict(originalRow, originalColumn, i, originalColumn));
-      }
-      if (originalRow != i && this.puzzle[originalRow][originalColumn] == this.puzzle[originalRow][i]) {
+      //check Row
+      if (originalColumn != i && this.puzzle[originalRow][originalColumn] == this.puzzle[originalRow][i]) {
         conflicts.add(new SudokuConflict(originalRow, originalColumn, originalRow, i));
+      }
+      //check Column
+      if (originalRow != i && this.puzzle[originalRow][originalColumn] == this.puzzle[i][originalColumn]) {
+        conflicts.add(new SudokuConflict(originalRow, originalColumn, i, originalColumn));
       }
     }
   }
@@ -103,7 +106,7 @@ public class SudokuPuzzleState implements PuzzleState {
 
     for (int rowIndex = startRow; rowIndex < startRow + 3; rowIndex++) {
       for (int columnIndex = startColumn; columnIndex < startColumn + 3; columnIndex++) {
-        if (rowIndex != row && columnIndex != column && this.puzzle[rowIndex][columnIndex] == number) {
+        if (!(rowIndex == row && columnIndex == column) && this.puzzle[rowIndex][columnIndex] == number) {
           conflicts.add(new SudokuConflict(row, column, rowIndex, columnIndex));
         }
       }

@@ -52,7 +52,7 @@ public class KQueensStateManager extends LocalStateManager {
 
     @Override
     public void reset() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     
     }
 
     @Override
@@ -98,11 +98,17 @@ public class KQueensStateManager extends LocalStateManager {
 
     @Override
     public void displayState(PuzzleState state) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        state.display();
     }
 
     @Override
     public void initialize(Object[] parameters) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      //k-queens difficulties are chosen through the number of queens
+      //no need for init data
     }
+
+  @Override
+  public PuzzleState getSmartNeighbour(PuzzleState state) {
+    return this.getRandomNeighbour(state);
+  }
 }

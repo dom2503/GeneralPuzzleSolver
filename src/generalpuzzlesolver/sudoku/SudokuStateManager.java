@@ -107,37 +107,96 @@ public class SudokuStateManager extends LocalStateManager {
     state.display();
   }
 
+  public int calculateConflictCount(ArrayList<Conflict> conflicts) {
+    int conflictCount = 0;
+
+    for (Conflict conflict : conflicts) {
+      SudokuConflict currentConflict = (SudokuConflict) conflict;
+      if (this.startingState.getNumberAt(currentConflict.getRow(), currentConflict.getColumn()) != 0) {
+        conflictCount += 5;
+      } else {
+        conflictCount++;
+      }
+    }
+
+    return conflictCount;
+  }
+
   @Override
   public PuzzleState getRandomNeighbour(PuzzleState state) {
-    ArrayList<Conflict> conflicts = state.getConflicts();
-    SudokuConflict currentConflict = null;
-    int counter = 0;
+    boolean changed = false;
+    SudokuPuzzleState newState = new SudokuPuzzleState((SudokuPuzzleState) state);
 
-    //select a random conflict
-    while (currentConflict == null && counter < conflicts.size()) {
-      int randomIndex = random.nextInt(conflicts.size());
-      currentConflict = (SudokuConflict) conflicts.get(randomIndex);
-      if (this.startingState.getNumberAt(currentConflict.getRow(), currentConflict.getColumn()) != 0) {
-        currentConflict = null;
+    while (!changed) {
+      int randomRow = random.nextInt(9);
+      int randomColumn = random.nextInt(9);
+      
+      if (this.startingState.getNumberAt(randomRow, randomColumn) == 0) {
+        newState.setNumberAt(randomRow, randomColumn, random.nextInt(9) + 1);    
+        changed = true;
       }
-      counter++;
     }
 
+    return newState;
+  }
+
+  /**
+   * Select a random conflict and selects the smartes change.
+   *
+   * Based on hints and pseudocode from:
+   * https://amoon.netfirms.com/Portfolio/Applied%20AI%20-%20Sudoku%20Solver.pdf
+   *
+   * @param state
+   * @return
+   */
+  @Override
+  public PuzzleState getSmartNeighbour(PuzzleState state) {
+    ArrayList<Conflict> conflicts = state.getConflicts();
+    ArrayList<Conflict> selectionList = conflicts;
     SudokuPuzzleState newState = new SudokuPuzzleState((SudokuPuzzleState) state);
-    if (currentConflict != null) {
-      int bestNumber = newState.getNumberAt(currentConflict.getRow(), currentConflict.getColumn());
-      int bestConflicts = newState.getConflicts().size();
-      for (int i = 1; i < 10; i++) {
-        newState.setNumberAt(currentConflict.getRow(), currentConflict.getColumn(), i);
-        int currentConflictCount = newState.getConflicts().size();
-        if (bestConflicts > currentConflictCount) {
-          bestNumber = i;
-          bestConflicts = currentConflictCount;
+    if (conflicts.size() > 0) {
+      SudokuConflict currentConflict = null;
+      int counter = 0;
+
+      //prefer conflicts that have a problem with an initial number
+      ArrayList<Conflict> conflictWithStart = new ArrayList<Conflict>();
+      for (Conflict conflict : conflicts) {
+        SudokuConflict selectedConflict = (SudokuConflict) conflict;
+        if (this.startingState.getNumberAt(selectedConflict.getViolatesRow(), selectedConflict.getViolatesColumn()) != 0) {
+          conflictWithStart.add(conflict);
         }
       }
-      newState.setNumberAt(currentConflict.getRow(), currentConflict.getColumn(), bestNumber);
-      return newState;
+
+      if (conflictWithStart.size() > 0) {
+        selectionList = conflictWithStart;
+      }
+
+      //select a random conflict
+      while (currentConflict == null && counter < selectionList.size()) {
+        int randomIndex = random.nextInt(selectionList.size());
+        currentConflict = (SudokuConflict) selectionList.get(randomIndex);
+        //if it was already in the starting state, it's not changeable so reset to null
+        if (this.startingState.getNumberAt(currentConflict.getRow(), currentConflict.getColumn()) != 0) {
+          currentConflict = null;
+        }
+        counter++;
+      }
+
+      if (currentConflict != null) {
+        int lowestConflict = this.calculateConflictCount(conflicts);
+        int bestValue = newState.getNumberAt(currentConflict.getRow(), currentConflict.getColumn());
+        int newConflictCount;
+        for (int i = 1; i <= 9; i++) {
+          newState.setNumberAt(currentConflict.getRow(), currentConflict.getColumn(), i);
+          newConflictCount = this.calculateConflictCount(newState.getConflicts());
+          if (newConflictCount <= lowestConflict) {
+            lowestConflict = newConflictCount;
+            bestValue = i;
+          }
+        }
+        newState.setNumberAt(currentConflict.getRow(), currentConflict.getColumn(), bestValue);
+      }
     }
-    return null;
+    return newState;
   }
 }
