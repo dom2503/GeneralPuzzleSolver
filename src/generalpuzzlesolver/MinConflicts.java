@@ -11,7 +11,6 @@ import java.util.ArrayList;
  */
 public class MinConflicts extends ConstraintBasedLocalSearch {
 
-  private int lastConflictsCount;
   private int restartCounter = 0;
 
   public MinConflicts(int maximumSteps) {

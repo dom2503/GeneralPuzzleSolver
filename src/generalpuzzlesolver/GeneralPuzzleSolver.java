@@ -1,5 +1,6 @@
 package generalpuzzlesolver;
 
+import kqueens.KQueensStateManager;
 import generalpuzzlesolver.puzzle.PuzzleState;
 import generalpuzzlesolver.puzzle.LocalStateManager;
 import generalpuzzlesolver.graph.GraphColoringStateManager;
@@ -17,6 +18,7 @@ public class GeneralPuzzleSolver {
   private Scanner scanner;
   private ConstraintBasedLocalSearch searcher;
   private int numberOfRuns;
+  private int[] stepsTaken;
   private LocalStateManager puzzle;
 
   /**
@@ -40,9 +42,9 @@ public class GeneralPuzzleSolver {
     this.puzzle = this.choosePuzzle();
     this.searcher = this.chooseSearchAlgorithm();
     this.searcher.setStateManager(this.puzzle);
+    
     this.numberOfRuns = this.chooseNumberOfRuns();
-
-    this.resetStatistics();
+    this.stepsTaken = new int[this.numberOfRuns];
 
     PuzzleState currentSolution;
 
@@ -51,13 +53,32 @@ public class GeneralPuzzleSolver {
       if(this.numberOfRuns == 1){
         currentSolution.display();
       }
+      this.stepsTaken[i] = this.searcher.getStepCount();
       System.out.println("Used Steps: " + this.searcher.getStepCount());
       System.out.println("Number of conflicts: " + currentSolution.getConflicts().size());
       this.searcher.reset();
     }
+    
+    System.out.println();
+    this.printStatistics();
   }
 
-  private void resetStatistics() {
+  private void printStatistics() {
+    double sum = 0;
+    for(int steps : this.stepsTaken){
+      sum +=steps;
+    }
+    double average = sum / this.numberOfRuns;
+    System.out.println("The average is: " + average);
+    
+    double sumOfDifferences = 0;
+    for(int steps : this.stepsTaken){
+      sumOfDifferences += Math.pow(steps-average, 2);
+    }
+    
+    double standardDeviation = Math.sqrt(sumOfDifferences/this.numberOfRuns);
+    
+    System.out.println("The standard deviation is: " + standardDeviation);
   }
 
   /**
@@ -87,7 +108,9 @@ public class GeneralPuzzleSolver {
 
     switch (puzzleIndex) {
       case 1:
-        selectedPuzzle = new KQueensStateManager(8);
+        System.out.println("How many queens should be placed?");
+        int numberOfQueens = this.scanner.nextInt();
+        selectedPuzzle = new KQueensStateManager(numberOfQueens);
         
         break;
       case 2:
