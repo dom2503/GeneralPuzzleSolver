@@ -9,10 +9,10 @@ import generalpuzzlesolver.puzzle.PuzzleState;
  */
 public class SimulatedAnnealing extends ConstraintBasedLocalSearch {
 
-    //values as proposed here:http://artint.info/html/ArtInt_89.html
+  //values as proposed here:http://artint.info/html/ArtInt_89.html
   private final static double START_TEMPERATURE = 10.0;
   private final static double TEMPERATURE_MULTIPLIER = 0.97;
-  
+
   public SimulatedAnnealing(int maximumSteps) {
     super(maximumSteps);
   }
@@ -20,7 +20,7 @@ public class SimulatedAnnealing extends ConstraintBasedLocalSearch {
   @Override
   public PuzzleState run() {
     PuzzleState currentState = this.getStateManager().getRandomState();
-    double currentEvaluation = this.evaluate(currentState);
+    double currentEvaluation = this.getStateManager().evaluate(currentState);
 
     PuzzleState candidate, bestState = currentState;
     double candidateEvaluation, bestEvaluation = currentEvaluation;
@@ -32,7 +32,7 @@ public class SimulatedAnnealing extends ConstraintBasedLocalSearch {
       temperature *= TEMPERATURE_MULTIPLIER;
 
       candidate = this.getStateManager().getRandomNeighbour(currentState);
-      candidateEvaluation = this.evaluate(candidate);
+      candidateEvaluation = this.getStateManager().evaluate(candidate);
 
       if (this.isAcceptable(candidateEvaluation, currentEvaluation, temperature)) {
         currentState = candidate;
@@ -51,17 +51,7 @@ public class SimulatedAnnealing extends ConstraintBasedLocalSearch {
   }
 
   private boolean isAcceptable(double candidateEvaluation, double currentEvaluation, double temperature) {
-    return candidateEvaluation < currentEvaluation || Math.exp(-(candidateEvaluation - currentEvaluation)/ temperature)
+    return candidateEvaluation < currentEvaluation || Math.exp(-(candidateEvaluation - currentEvaluation) / temperature)
             > Math.random();
-  }
-
-  private double evaluate(PuzzleState state) {
-    if (state.isFinal()) {
-      return 0.0;
-    } else {
-      double maximumConflicts = state.getMaximumNumberOfConflicts();
-      double numberOfConflicts= state.getConflicts().size();
-      return numberOfConflicts / maximumConflicts;
-    }
   }
 }

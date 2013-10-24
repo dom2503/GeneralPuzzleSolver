@@ -1,4 +1,4 @@
-package kqueens;
+package generalpuzzlesolver.kqueens;
 
 import generalpuzzlesolver.puzzle.Conflict;
 import generalpuzzlesolver.puzzle.PuzzleState;

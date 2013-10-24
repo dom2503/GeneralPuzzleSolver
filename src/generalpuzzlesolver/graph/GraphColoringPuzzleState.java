@@ -155,18 +155,7 @@ public class GraphColoringPuzzleState implements PuzzleState {
   
   @Override
   public int getMaximumNumberOfConflicts(){
-    int numberOfNodes = this.getNumberOfVertices();
-    int numberOfEdges = 0;
-    
-    for (int row = 0; row < numberOfNodes; row++) {
-      for (int column = 0; column < numberOfNodes; column++) {
-        if(this.adjacencyMatrix[row][column]){
-          numberOfEdges++;
-        }
-      }
-    }
-    
-    return numberOfEdges;
+    return this.vertices.length * this.vertices.length;
   }
   
   /**

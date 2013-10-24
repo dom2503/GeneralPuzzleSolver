@@ -36,4 +36,14 @@ abstract public class LocalStateManager {
    * Displays the given state of the puzzle in a useful way.
    */
   abstract public void displayState(PuzzleState state);
+  
+  public double evaluate(PuzzleState state){
+    if (state.isFinal()) {
+      return 0.0;
+    } else {
+      double maximumConflicts = state.getMaximumNumberOfConflicts();
+      double numberOfConflicts= state.getConflicts().size();
+      return numberOfConflicts / maximumConflicts;
+    }
+  }
 }
