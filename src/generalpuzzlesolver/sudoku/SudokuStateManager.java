@@ -113,7 +113,7 @@ public class SudokuStateManager extends LocalStateManager {
     for (Conflict conflict : conflicts) {
       SudokuConflict currentConflict = (SudokuConflict) conflict;
       if (this.startingState.getNumberAt(currentConflict.getRow(), currentConflict.getColumn()) != 0) {
-        conflictCount += 5;
+        conflictCount += 30;
       } else {
         conflictCount++;
       }

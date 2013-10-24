@@ -26,9 +26,9 @@ public class KQueensPuzzleState implements PuzzleState {
   @Override
   public void display() {
     int size = this.queens.length;
-    System.out.print("   ");
+    System.out.print("    ");
     for (int column = 0; column < size; column++) {
-      System.out.print("    " + String.format("%3d", column) + "");
+      System.out.print("  " + String.format("%1d", column) + "");
     }
     System.out.println();
 
@@ -36,9 +36,9 @@ public class KQueensPuzzleState implements PuzzleState {
       System.out.print(" " + String.format("%3d", row) + " ");
       for (int column = 0; column < size; column++) {
         if (queens[row] == column) {
-          System.out.print("  Q  ");
+          System.out.print(" Q ");
         } else {
-          System.out.print(" ____  ");
+          System.out.print(" _ ");
         }
       }
       System.out.println();
