@@ -22,7 +22,7 @@ public class SudokuPuzzleState implements PuzzleState {
   }
 
   public SudokuPuzzleState(SudokuPuzzleState blueprint) {
-    this();
+    puzzle = new int[PUZZLE_SIZE][PUZZLE_SIZE];
     for (int i = 0; i < PUZZLE_SIZE; i++) {
       System.arraycopy(blueprint.puzzle[i], 0, this.puzzle[i], 0, PUZZLE_SIZE);
     }
@@ -37,7 +37,7 @@ public class SudokuPuzzleState implements PuzzleState {
    * @param data
    */
   public SudokuPuzzleState(int[] data) {
-    this();
+    puzzle = new int[PUZZLE_SIZE][PUZZLE_SIZE];
     int counter = 0;
     for (int row = 0; row < PUZZLE_SIZE; row++) {
       for (int column = 0; column < PUZZLE_SIZE; column++) {
@@ -79,26 +79,20 @@ public class SudokuPuzzleState implements PuzzleState {
     for (int row = 0; row < PUZZLE_SIZE; row++) {
       for (int column = 0; column < PUZZLE_SIZE; column++) {
         int currentNumber = puzzle[row][column];
-        this.findConflictsInRow(currentNumber, row, column, conflicts);
-        this.findConflictsInColumn(currentNumber, row, column, conflicts);
+        this.findConflictsInRowAndColumn(row, column, conflicts);
         this.findConflictsInBlock(currentNumber, row, column, conflicts);
       }
     }
     return conflicts;
   }
 
-  private void findConflictsInRow(int number, int row, int originalColumn, ArrayList<Conflict> conflicts) {
-    for (int checkColumn = 0; checkColumn < PUZZLE_SIZE; checkColumn++) {
-      if (originalColumn != checkColumn && this.puzzle[row][checkColumn] == number) {
-        conflicts.add(new SudokuConflict(row, originalColumn, row, checkColumn));
+  private void findConflictsInRowAndColumn(int originalRow, int originalColumn, ArrayList<Conflict> conflicts) {
+    for (int i = 0; i < PUZZLE_SIZE; i++) {
+      if (originalColumn != i && this.puzzle[originalRow][originalColumn] == this.puzzle[i][originalColumn]) {
+        conflicts.add(new SudokuConflict(originalRow, originalColumn, i, originalColumn));
       }
-    }
-  }
-
-  private void findConflictsInColumn(int number, int originalRow, int column, ArrayList<Conflict> conflicts) {
-    for (int checkRow = 0; checkRow < PUZZLE_SIZE; checkRow++) {
-      if (originalRow != checkRow && this.puzzle[checkRow][column] == number) {
-        conflicts.add(new SudokuConflict(originalRow, column, checkRow, column));
+      if (originalRow != i && this.puzzle[originalRow][originalColumn] == this.puzzle[originalRow][i]) {
+        conflicts.add(new SudokuConflict(originalRow, originalColumn, originalRow, i));
       }
     }
   }

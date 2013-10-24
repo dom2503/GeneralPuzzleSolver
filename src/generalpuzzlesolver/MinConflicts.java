@@ -9,6 +9,9 @@ import generalpuzzlesolver.puzzle.PuzzleState;
  */
 public class MinConflicts extends ConstraintBasedLocalSearch {
 
+  private int lastConflictsCount;
+  private int restartCounter = 0;
+  
   public MinConflicts(int maximumSteps) {
     super(maximumSteps);
   }
@@ -24,14 +27,27 @@ public class MinConflicts extends ConstraintBasedLocalSearch {
     this.resetStepCount();
     PuzzleState currentState = this.getStateManager().getRandomState();
     PuzzleState nextState;
+    lastConflictsCount = currentState.getMaximumNumberOfConflicts();
+    int currentConflictCount;
     
-    for (int i = 0; i < this.getMaximumSteps(); i++) {
-      if (currentState != null && currentState.isFinal()) {
+    int maximumSteps = this.getMaximumSteps();
+    for (int i = 0; i < maximumSteps; i++) {
+      if (currentState.isFinal()) {
         return currentState;
       }
       nextState = this.getStateManager().getRandomNeighbour(currentState);
+      currentConflictCount = nextState.getConflicts().size();
       if (this.hasLowerConflicts(currentState, nextState)) {
         currentState = nextState;
+      }
+      restartCounter++;
+      if(lastConflictsCount!=currentConflictCount){
+        lastConflictsCount = currentConflictCount;
+        this.restartCounter = 0;
+      }
+      
+      if(restartCounter > 10000){
+        return this.run();
       }
       this.incrementStepCount();
     }

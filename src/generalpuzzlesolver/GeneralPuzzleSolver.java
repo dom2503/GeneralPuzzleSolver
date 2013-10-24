@@ -159,10 +159,10 @@ public class GeneralPuzzleSolver {
 
     switch (algorithmIndex) {
       case 1:
-        selectedSearcher = new SimulatedAnnealing(10000000);
+        selectedSearcher = new SimulatedAnnealing(1000000);
         break;
       case 2:
-        selectedSearcher = new MinConflicts(10000000);
+        selectedSearcher = new MinConflicts(100000);
         break;
       default:
         //wrong selection, so start again

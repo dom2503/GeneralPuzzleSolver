@@ -125,12 +125,12 @@ public class SudokuStateManager extends LocalStateManager {
 
     SudokuPuzzleState newState = new SudokuPuzzleState((SudokuPuzzleState) state);
     if (currentConflict != null) {
-      int bestNumber = -1;
-      int bestConflicts = 10;
-      for(int i = 1; i<10;i++){
+      int bestNumber = newState.getNumberAt(currentConflict.getRow(), currentConflict.getColumn());
+      int bestConflicts = newState.getConflicts().size();
+      for (int i = 1; i < 10; i++) {
         newState.setNumberAt(currentConflict.getRow(), currentConflict.getColumn(), i);
         int currentConflictCount = newState.getConflicts().size();
-        if(bestNumber < 0 || bestConflicts > currentConflictCount){
+        if (bestConflicts > currentConflictCount) {
           bestNumber = i;
           bestConflicts = currentConflictCount;
         }

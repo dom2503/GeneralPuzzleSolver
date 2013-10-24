@@ -9,6 +9,7 @@ import generalpuzzlesolver.puzzle.PuzzleState;
  */
 public class SimulatedAnnealing extends ConstraintBasedLocalSearch {
 
+    //values as proposed here:http://artint.info/html/ArtInt_89.html
   private final static double START_TEMPERATURE = 10.0;
   private final static double TEMPERATURE_MULTIPLIER = 0.97;
   
@@ -24,7 +25,6 @@ public class SimulatedAnnealing extends ConstraintBasedLocalSearch {
     PuzzleState candidate, bestState = currentState;
     double candidateEvaluation, bestEvaluation = currentEvaluation;
 
-    //values as proposed here:http://artint.info/html/ArtInt_89.html
     double temperature = START_TEMPERATURE;
 
     this.resetStepCount();
